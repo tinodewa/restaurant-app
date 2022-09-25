@@ -1,40 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurantapp/common/styles.dart';
-import 'package:restaurantapp/provider/restaurant_provider.dart';
-import 'package:restaurantapp/widget/card_restaurant.dart';
+import 'package:restaurantapp/provider/detail_restaurant_provider.dart';
+import 'package:restaurantapp/widget/detail_restaurant.dart';
 
-class RestaurantListPage extends StatefulWidget {
-  const RestaurantListPage({super.key});
+class RestaurantDetailItem extends StatelessWidget {
+  const RestaurantDetailItem({super.key});
 
-  @override
-  State<RestaurantListPage> createState() => _RestaurantListPageState();
-}
-
-class _RestaurantListPageState extends State<RestaurantListPage> {
   @override
   Widget build(BuildContext context) {
-    return _restaurantList(context);
+    return restaurantConsumer(context);
   }
 
-  Widget _restaurantList(BuildContext context) {
-    return Consumer<RestaurantProvider>(
+  Widget restaurantConsumer(BuildContext context) {
+    return Consumer<DetailRestaurantProvider>(
       builder: (context, state, _) {
         if (state.state == ResultState.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (state.state == ResultState.hasData) {
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-            shrinkWrap: true,
-            itemCount: state.result.restaurants.length,
-            itemBuilder: (context, index) {
-              var restaurant = state.result.restaurants[index];
-              return CardRestaurant(restaurant: restaurant);
-            },
-          );
+          return DetailRestaurant(restaurant: state.detailResult.restaurant);
         } else if (state.state == ResultState.noData) {
           return Center(
             child: Material(

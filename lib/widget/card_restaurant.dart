@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:restaurantapp/common/navigation.dart';
+import 'package:restaurantapp/data/api/api_service.dart';
 import 'package:restaurantapp/data/model/restaurant_result.dart';
-
-import '../ui/detail_restaurant_page.dart';
+import 'package:restaurantapp/ui/detail_restaurant_page.dart';
 
 class CardRestaurant extends StatelessWidget {
   final Restaurant restaurant;
@@ -13,10 +14,12 @@ class CardRestaurant extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        onTap: Navigation.intentWithData(
-          DetailRestaurant.routeName,
-          restaurant,
-        ),
+        onTap: () => SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigation.intentWithData(
+            DetailRestaurantPage.routeName,
+            restaurant.id,
+          );
+        }),
         child: Card(
           child: SizedBox(
             height: 75,
@@ -26,13 +29,10 @@ class CardRestaurant extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: Hero(
-                    tag: 'logo${restaurant.name.toString()}',
-                    child: Image.network(
-                      restaurant.pictureId.toString(),
-                      fit: BoxFit.cover,
-                      height: 75,
-                    ),
+                  child: Image.network(
+                    '${ApiService().getSmallImageById}${restaurant.pictureId.toString()}',
+                    fit: BoxFit.cover,
+                    height: 75,
                   ),
                 ),
                 Expanded(
