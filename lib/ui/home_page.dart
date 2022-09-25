@@ -6,6 +6,7 @@ import 'package:restaurantapp/data/api/api_service.dart';
 import 'package:restaurantapp/provider/restaurant_provider.dart';
 import 'package:restaurantapp/ui/restaurant_list_page.dart';
 import 'package:restaurantapp/widget/platform_widget.dart';
+import 'package:restaurantapp/widget/search_delegate.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home-page';
@@ -52,6 +53,24 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
+              },
+              child: const Icon(
+                Icons.search,
+                size: 26.0,
+                color: whiteColor,
+              ),
+            ),
+          ),
+        ],
       ),
       body: _contentWidget,
     );

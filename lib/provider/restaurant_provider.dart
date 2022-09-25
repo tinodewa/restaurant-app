@@ -33,7 +33,7 @@ class RestaurantProvider extends ChangeNotifier {
       } else {
         _state = ResultState.noData;
         notifyListeners();
-        return _message = 'Empty Data';
+        return _message = 'Data tidak ditemukan!';
       }
     } catch (e) {
       notifyListeners();
