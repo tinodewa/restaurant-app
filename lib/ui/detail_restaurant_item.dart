@@ -32,6 +32,17 @@ class RestaurantDetailItem extends StatelessWidget {
               ],
             )),
           );
+        } else if (state.state == ResultState.noConnection) {
+          return Center(
+            child: Material(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, color: secondaryColor),
+                Text(state.message),
+              ],
+            )),
+          );
         } else if (state.state == ResultState.error) {
           return Center(
             child: Material(

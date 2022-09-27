@@ -37,12 +37,34 @@ class CustomSearchDelegate extends SearchDelegate {
       child: const SearchConsumer(),
     );
 
-    return contentWidget;
+    if (query.isNotEmpty) {
+      return contentWidget;
+    } else {
+      return Center(
+        child: Material(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.error_outline, color: secondaryColor),
+            Text('Mohon masukkan nama restoran!'),
+          ],
+        )),
+      );
+    }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Column();
+    return Center(
+      child: Material(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.search, color: secondaryColor),
+          Text('Cari restoran favoritmu disini!'),
+        ],
+      )),
+    );
   }
 }
 
@@ -69,6 +91,17 @@ class SearchConsumer extends StatelessWidget {
             },
           );
         } else if (state.state == ResultState.noData) {
+          return Center(
+            child: Material(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, color: secondaryColor),
+                Text(state.message),
+              ],
+            )),
+          );
+        } else if (state.state == ResultState.noConnection) {
           return Center(
             child: Material(
                 child: Column(
