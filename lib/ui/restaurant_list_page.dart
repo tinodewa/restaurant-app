@@ -5,6 +5,7 @@ import 'package:restaurantapp/provider/restaurant_provider.dart';
 import 'package:restaurantapp/widget/card_restaurant.dart';
 
 class RestaurantListPage extends StatefulWidget {
+  static const String headlineText = 'Restaurant';
   const RestaurantListPage({super.key});
 
   @override

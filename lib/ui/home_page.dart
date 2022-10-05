@@ -1,12 +1,13 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:restaurantapp/common/styles.dart';
-import 'package:restaurantapp/data/api/api_service.dart';
-import 'package:restaurantapp/provider/restaurant_provider.dart';
 import 'package:restaurantapp/ui/restaurant_list_page.dart';
+import 'package:restaurantapp/ui/settings_page.dart';
 import 'package:restaurantapp/widget/platform_widget.dart';
 import 'package:restaurantapp/widget/search_delegate.dart';
+
+import 'bookmark_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home-page';
@@ -18,6 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _bottomNavIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -26,10 +29,34 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  final _contentWidget = ChangeNotifierProvider<RestaurantProvider>(
-    create: (context) => RestaurantProvider(apiService: ApiService()),
-    child: const RestaurantListPage(),
-  );
+  final List<Widget> _listWidget = [
+    const RestaurantListPage(),
+    const BookmarksPage(),
+    const SettingsPage(),
+  ];
+
+  final List<BottomNavigationBarItem> _bottomNavBarItems = [
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
+      label: RestaurantListPage.headlineText,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS
+          ? CupertinoIcons.bookmark
+          : Icons.collections_bookmark),
+      label: BookmarksPage.bookmarksTitle.toString(),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
+      label: SettingsPage.settingsText,
+    ),
+  ];
+
+  void _onBottomNavTapped(int index) {
+    setState(() {
+      _bottomNavIndex = index;
+    });
+  }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
@@ -72,16 +99,25 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _contentWidget,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: secondaryColor,
+        currentIndex: _bottomNavIndex,
+        items: _bottomNavBarItems,
+        onTap: _onBottomNavTapped,
+      ),
+      body: _listWidget[_bottomNavIndex],
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Restaurant'),
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        activeColor: secondaryColor,
+        items: _bottomNavBarItems,
       ),
-      child: _contentWidget,
+      tabBuilder: (context, index) {
+        return _listWidget[index];
+      },
     );
   }
 }

@@ -1,8 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurantapp/common/navigation.dart';
-import 'package:restaurantapp/common/styles.dart';
+import 'package:restaurantapp/data/db/database_helper.dart';
+import 'package:restaurantapp/provider/database_provider.dart';
+import 'package:restaurantapp/provider/preferences_provider.dart';
+import 'package:restaurantapp/provider/restaurant_provider.dart';
 import 'package:restaurantapp/ui/detail_restaurant_page.dart';
 import 'package:restaurantapp/ui/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'data/api/api_service.dart';
+import 'data/provider/preferences_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,39 +23,54 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Restaurant App',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(elevation: 0),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: primaryColor,
-              secondary: secondaryColor,
-              onPrimary: Colors.black,
-            ),
-        textTheme: restaurantTextTheme,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryLightColor,
-            foregroundColor: whiteColor,
-            textStyle: const TextStyle(),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(0),
-              ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RestaurantProvider(
+            apiService: ApiService(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PreferencesProvider(
+            preferenceHelper: PreferenceHelper(
+              sharedPreference: SharedPreferences.getInstance(),
             ),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => DatabaseProvider(
+            databaseHelper: DatabaseHelper(),
+          ),
+        ),
+      ],
+      child: Consumer<PreferencesProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp(
+            title: 'Restaurant App',
+            theme: provider.themeData,
+            builder: (context, child) {
+              return CupertinoTheme(
+                data: CupertinoThemeData(
+                  brightness:
+                      provider.isDarkTheme ? Brightness.dark : Brightness.light,
+                ),
+                child: Material(
+                  child: child,
+                ),
+              );
+            },
+            initialRoute: HomePage.routeName,
+            routes: {
+              HomePage.routeName: (context) => const HomePage(),
+              DetailRestaurantPage.routeName: (context) => DetailRestaurantPage(
+                    idRestaurant:
+                        ModalRoute.of(context)?.settings.arguments as String,
+                  )
+            },
+            navigatorKey: navigatorKey,
+          );
+        },
       ),
-      initialRoute: HomePage.routeName,
-      routes: {
-        HomePage.routeName: (context) => const HomePage(),
-        DetailRestaurantPage.routeName: (context) => DetailRestaurantPage(
-              idRestaurant:
-                  ModalRoute.of(context)?.settings.arguments as String,
-            )
-      },
-      navigatorKey: navigatorKey,
     );
   }
 }

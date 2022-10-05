@@ -6,6 +6,8 @@ const Color primaryMediumColor = Color(0xFF37966F);
 const Color primaryLightColor = Color(0xFFB9E4C9);
 const Color secondaryColor = Color(0xFFFD5523);
 const Color whiteColor = Color(0xFFFFFBE6);
+const Color darkPrimaryColor = Color(0xFF000000);
+const Color darkSecondaryColor = Color(0xFFB9E4C9);
 
 final TextTheme restaurantTextTheme = TextTheme(
   headline1: GoogleFonts.montserrat(
@@ -32,4 +34,50 @@ final TextTheme restaurantTextTheme = TextTheme(
       fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 0.4),
   overline: GoogleFonts.lekton(
       fontSize: 9, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+);
+
+ThemeData lightTheme = ThemeData(
+  appBarTheme: const AppBarTheme(elevation: 0),
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  colorScheme: ThemeData.light().colorScheme.copyWith(
+        primary: primaryColor,
+        secondary: secondaryColor,
+        onPrimary: Colors.black,
+      ),
+  textTheme: restaurantTextTheme,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: primaryLightColor,
+      foregroundColor: whiteColor,
+      textStyle: const TextStyle(),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
+    ),
+  ),
+);
+
+ThemeData darkTheme = ThemeData(
+  appBarTheme: const AppBarTheme(elevation: 0),
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  colorScheme: ThemeData.light().colorScheme.copyWith(
+        primary: darkPrimaryColor,
+        secondary: darkSecondaryColor,
+        onPrimary: Colors.black,
+      ),
+  textTheme: restaurantTextTheme,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: primaryLightColor,
+      foregroundColor: whiteColor,
+      textStyle: const TextStyle(),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
+    ),
+  ),
 );
