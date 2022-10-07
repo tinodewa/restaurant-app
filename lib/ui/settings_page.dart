@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/preferences_provider.dart';
+import '../provider/scheduling_provider.dart';
+import '../widget/custom_widget.dart';
 import '../widget/platform_widget.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -44,26 +48,37 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Material(
-            //   child: ListTile(
-            //     title: const Text('Scheduling News'),
-            //     trailing: Consumer<SchedulingProvider>(
-            //       builder: (context, scheduled, _) {
-            //         return Switch.adaptive(
-            //           value: provider.isDailyNewsActive,
-            //           onChanged: (value) async {
-            //             if (Platform.isIOS) {
-            //               customDialog(context);
-            //             } else {
-            //               scheduled.scheduleNews(value);
-            //               provider.enableDailyNews(value);
-            //             }
-            //           },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
+            Material(
+              child: ListTile(
+                title: const Text('Daily Recommendation'),
+                trailing: Consumer<SchedulingProvider>(
+                  builder: (context, scheduled, _) {
+                    return Switch.adaptive(
+                      value: provider.isDailyRecommendationActive,
+                      onChanged: (value) async {
+                        if (Platform.isIOS) {
+                          customDialog(context);
+                        } else {
+                          if (value == true) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Notifikasi aktif jam 11 Siang'),
+                            ));
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Notifikasi dimatikan'),
+                            ));
+                          }
+                          scheduled.scheduleRecommendation(value);
+                          provider.enableDailyRecommendation(value);
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
         );
       },

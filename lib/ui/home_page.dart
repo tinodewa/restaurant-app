@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurantapp/common/styles.dart';
+import 'package:restaurantapp/ui/detail_restaurant_page.dart';
 import 'package:restaurantapp/ui/restaurant_list_page.dart';
 import 'package:restaurantapp/ui/settings_page.dart';
+import 'package:restaurantapp/utils/notification_helper.dart';
 import 'package:restaurantapp/widget/platform_widget.dart';
 import 'package:restaurantapp/widget/search_delegate.dart';
 
@@ -20,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
+  final NotificationHelper _notificationHelper = NotificationHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -119,5 +122,18 @@ class _HomePageState extends State<HomePage> {
         return _listWidget[index];
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(DetailRestaurantPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    selectNotificationSubject.close();
   }
 }

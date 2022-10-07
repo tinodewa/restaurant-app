@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../common/styles.dart';
-import '../data/provider/preferences_helper.dart';
+import '../data/preferences/preferences_helper.dart';
 
 class PreferencesProvider extends ChangeNotifier {
   PreferenceHelper preferenceHelper;
@@ -13,8 +13,8 @@ class PreferencesProvider extends ChangeNotifier {
   bool _isDarkTheme = false;
   bool get isDarkTheme => _isDarkTheme;
 
-  bool _isDailyNewsActive = false;
-  bool get isDailyNewsActive => _isDailyNewsActive;
+  bool _isDailyRecommendationActive = false;
+  bool get isDailyRecommendationActive => _isDailyRecommendationActive;
 
   ThemeData get themeData => _isDarkTheme ? darkTheme : lightTheme;
 
@@ -24,17 +24,18 @@ class PreferencesProvider extends ChangeNotifier {
   }
 
   void _getDailyRecommendationPreferences() async {
-    _isDailyNewsActive = await preferenceHelper.isDailyRecommendationActive;
+    _isDailyRecommendationActive =
+        await preferenceHelper.isDailyRecommendationActive;
     notifyListeners();
   }
 
   void enableDarkTheme(bool value) {
-    _isDarkTheme = value;
-    notifyListeners();
+    preferenceHelper.setDarkTheme(value);
+    _getTheme();
   }
 
-  void enableDailyNews(bool value) {
-    _isDailyNewsActive = value;
-    notifyListeners();
+  void enableDailyRecommendation(bool value) {
+    preferenceHelper.setDailyRecommendation(value);
+    _getDailyRecommendationPreferences();
   }
 }

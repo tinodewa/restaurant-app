@@ -6,8 +6,8 @@ const Color primaryMediumColor = Color(0xFF37966F);
 const Color primaryLightColor = Color(0xFFB9E4C9);
 const Color secondaryColor = Color(0xFFFD5523);
 const Color whiteColor = Color(0xFFFFFBE6);
-const Color darkPrimaryColor = Color(0xFF000000);
-const Color darkSecondaryColor = Color(0xFFB9E4C9);
+const Color darkPrimaryColor = Color(0xFF2c3e50);
+const Color darkSecondaryColor = Color(0xFF356859);
 
 final TextTheme restaurantTextTheme = TextTheme(
   headline1: GoogleFonts.montserrat(
@@ -42,14 +42,14 @@ ThemeData lightTheme = ThemeData(
   colorScheme: ThemeData.light().colorScheme.copyWith(
         primary: primaryColor,
         secondary: secondaryColor,
-        onPrimary: Colors.black,
+        onPrimary: darkPrimaryColor,
       ),
   textTheme: restaurantTextTheme,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: primaryLightColor,
       foregroundColor: whiteColor,
-      textStyle: const TextStyle(),
+      textStyle: const TextStyle(color: darkPrimaryColor),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(0),
@@ -62,17 +62,17 @@ ThemeData lightTheme = ThemeData(
 ThemeData darkTheme = ThemeData(
   appBarTheme: const AppBarTheme(elevation: 0),
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  colorScheme: ThemeData.light().colorScheme.copyWith(
+  colorScheme: ThemeData.dark().colorScheme.copyWith(
         primary: darkPrimaryColor,
         secondary: darkSecondaryColor,
-        onPrimary: Colors.black,
+        onPrimary: darkPrimaryColor,
       ),
   textTheme: restaurantTextTheme,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: primaryLightColor,
       foregroundColor: whiteColor,
-      textStyle: const TextStyle(),
+      textStyle: const TextStyle(color: whiteColor),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(0),
