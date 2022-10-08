@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:restaurantapp/data/model/restaurant_detail_result.dart';
 import 'package:restaurantapp/data/model/restaurant_result.dart';
@@ -50,5 +52,18 @@ class ApiService {
     } else {
       throw Exception('Failed to search restaurant!');
     }
+  }
+}
+
+Future<RestaurantDetailResult> testFutureGetDetailRestaurant(
+    http.Client client) async {
+  final response = await client.get(Uri.parse(
+      'https://restaurant-api.dicoding.dev/detail/rqdv5juczeskfw1e867'));
+
+  if (response.statusCode == 200) {
+    var restaurantDetailResult = restaurantDetailResultFromJson(response.body);
+    return restaurantDetailResult;
+  } else {
+    throw Exception('Failed to load restaurants!');
   }
 }
